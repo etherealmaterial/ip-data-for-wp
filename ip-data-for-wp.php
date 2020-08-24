@@ -1,12 +1,6 @@
 <?php
 
 /**
- * The plugin bootstrap file
- *
- * This file is read by WordPress to generate the plugin information in the plugin
- * admin area. This file also includes all of the dependencies used by the plugin,
- * registers the activation and deactivation functions, and defines a function
- * that starts the plugin.
  *
  * @link              ethereal-material.com
  * @since             1.0.0
@@ -15,7 +9,7 @@
  * @wordpress-plugin
  * Plugin Name:       IP Data for WP
  * Plugin URI:        ethereal-material.com/wp-dev/ip-data-for-wp
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
+ * Description:       GeoIP controller for WP using the IP Data API 
  * Version:           1.0.0
  * Author:            Scott Brown
  * Author URI:        ethereal-material.com
@@ -24,10 +18,6 @@
  * Text Domain:       ip-data-for-wp
  * Domain Path:       /languages
  */
-
-// If this file is called directly, abort.
-
-//ADMIN MENU---------------------------------------------------------------------
 
 
 add_action( 'admin_menu', 'ip_data_for_wp_add_admin_menu' );
