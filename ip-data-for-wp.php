@@ -26,57 +26,161 @@
  */
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+
+//ADMIN MENU---------------------------------------------------------------------
+
+
+add_action( 'admin_menu', 'ip_data_for_wp_add_admin_menu' );
+add_action( 'admin_init', 'ip_data_for_wp_settings_init' );
+
+
+function ip_data_for_wp_add_admin_menu(  ) { 
+	add_menu_page( 'IP Data for WP - Ethereal Material', 'Geo IP Controller', 'manage_options', 'ip_data_for_wp', 'ip_data_for_wp_options_page', 'dashicons-location');
 }
 
-/**
- * Currently plugin version.
- * Start at version 1.0.0 and use SemVer - https://semver.org
- * Rename this for your plugin and update it as you release new versions.
- */
-define( 'IP_DATA_FOR_WP_VERSION', '1.0.0' );
-
-/**
- * The code that runs during plugin activation.
- * This action is documented in includes/class-ip-data-for-wp-activator.php
- */
-function activate_ip_data_for_wp() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-ip-data-for-wp-activator.php';
-	Ip_Data_For_Wp_Activator::activate();
+function ip_data_for_wp_settings_init(  ) { 
+	register_setting( 'ip_data_for_wp_pluginPage', 'ip_data_for_wp_settings' );
+	add_settings_section(
+		'ip_data_for_wp_pluginPage_section', 
+		__( '', 'ip_data_for_wp' ), 
+		'ip_data_for_wp_settings_section_callback', 
+		'ip_data_for_wp_pluginPage'
+	);
+       add_settings_field( 
+		'ip_data_for_wp_ids', 
+		__( 'IDs (comma separated)', 'ip_data_for_wp' ), 
+		'ip_data_for_wp_ids_render', 
+		'ip_data_for_wp_pluginPage', 
+		'ip_data_for_wp_pluginPage_section' 
+	);
 }
 
-/**
- * The code that runs during plugin deactivation.
- * This action is documented in includes/class-ip-data-for-wp-deactivator.php
- */
-function deactivate_ip_data_for_wp() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-ip-data-for-wp-deactivator.php';
-	Ip_Data_For_Wp_Deactivator::deactivate();
+
+function ip_data_for_wp_ids_render(  ) { 
+	$options = get_option( 'ip_data_for_wp_settings' );
+	?>
+	<input type='text' name='ip_data_for_wp_settings[ip_data_for_wp_ids]' value='<?php echo $options['ip_data_for_wp_ids']; ?>'>
+	<?php
 }
 
-register_activation_hook( __FILE__, 'activate_ip_data_for_wp' );
-register_deactivation_hook( __FILE__, 'deactivate_ip_data_for_wp' );
 
-/**
- * The core plugin class that is used to define internationalization,
- * admin-specific hooks, and public-facing site hooks.
- */
-require plugin_dir_path( __FILE__ ) . 'includes/class-ip-data-for-wp.php';
+function ip_data_for_wp_settings_section_callback(  ) { 
+	echo __( '', 'ip_data_for_wp' );
+}
 
-/**
- * Begins execution of the plugin.
- *
- * Since everything within the plugin is registered via hooks,
- * then kicking off the plugin from this point in the file does
- * not affect the page life cycle.
- *
- * @since    1.0.0
- */
-function run_ip_data_for_wp() {
 
-	$plugin = new Ip_Data_For_Wp();
-	$plugin->run();
+
+function ip_data_for_wp_options_page(  ) { 
+
+?>
+<form action='options.php' method='post'>
+		
+<div id="post-body" class="metabox-holder columns-2">
+<div id="post-body-content">
+
+<h2>IP Data for WP - By Scott Brown</h2>
+
+
+<div class="postbox" style="width:70%; padding:30px;">
+<h2>Using the plugin</h2>
+
+<p>This plugin allows you to input your IP Data API key and returns GeoIP data associated to allow you to modify content on your WP instance.</p>
+
+<p><strong>Note: </strong>We offer a couple of shortcodes as explained in our documentation and will be growing this further in the near future.</p>
+
+<p style="padding-top:20px;"><strong>Steps</strong></p>	
+<p>1. Create an account at ipdata and subscribe to a tier that suits your traffic needs</p>
+<p>2. Enter your API key in the field below</p>
+<p>3. Save to bind the service to WP</p>
+<p>4. Deploy your own solution or use our guides for advice!</p>
+</div>
+
+
+<div class="postbox" style="width:70%; padding:30px;">
+<h2>Settings</h2>
+<?php
+settings_fields( 'ip_data_for_wp_pluginPage' );
+do_settings_sections( 'ip_data_for_wp_pluginPage' );
+submit_button();
+?>
+</div>
+
+</form>
+
+</div>
+</div>
+
+<?php
 
 }
-run_ip_data_for_wp();
+
+
+
+//GEO CONTENT-----------------------------------------------------------
+
+
+
+//ADD GEO POPUP WP HEAD
+
+
+
+add_action('wp_footer', 'ip_data_for_wp', -1000);
+
+function ip_data_for_wp() {
+	
+	$var = "some text";
+	$scripts = <<<EOT
+EOT;
+	
+	$ipdataapikey        = get_option('ip_data_for_wp_settings');
+    $ipdataapikey_string = preg_replace('/\s+/', '', $ipdataapikey['ip_data_for_wp_ids']);
+    $ipdataapikey_array  = explode(',', $ipdataapikey_string);
+    $ipdataapikey_array  = array_filter($ipdataapikey_array);
+	
+	if (!empty($ipdataapikey_array)) {
+        for ($i = 0; $i < count($ipdataapikey_array); ++$i) {
+            
+			$scripts .= <<<EOT
+<script>
+$.get('https://api.ipdata.co?api-key=' + '$ipdataapikey_array[$i]', function(response) {
+    console.log(response.country_code);
+}, 'jsonp');
+</script>
+
+
+EOT;
+            
+        }
+    }
+	
+	echo $scripts;
+}
+
+
+
+
+
+function ip_data_for_wp_shortcodes($atts = [], $contents = null)
+{
+    
+ return "<span class='ipdataforwp_".$atts['id']."'>".$contents."</span>";
+	
+
+}
+add_shortcode('ipdataforwp', 'ip_data_for_wp_shortcodes');
+
+
+function ip_data_for_wp_wrap_shortcodes($atts = [], $contents = null)
+{
+  if($atts['content'] !== "default"){  
+  return "<span style='display:none;' class='ipdataforwp_".$atts['id']."_content_".$atts['content']."'>".$contents."</span>"; 
+  }
+  else{
+	return "<span style='display:none;' class='ipdataforwp_".$atts['id']."_default'>".$contents."</span>";   
+	  
+  }	
+
+}
+add_shortcode('ipdataforwp', 'ip_data_for_wp_wrap_shortcodes');
+
+?>
