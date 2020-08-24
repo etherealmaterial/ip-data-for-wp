@@ -1,0 +1,22 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Method Ipdata\\\\ApiClient\\\\Ipdata\\:\\:lookup\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Ipdata.php
+
+		-
+			message: "#^Method Ipdata\\\\ApiClient\\\\Ipdata\\:\\:buildLookup\\(\\) has parameter \\$ips with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Ipdata.php
+
+		-
+			message: "#^Method Ipdata\\\\ApiClient\\\\Ipdata\\:\\:buildLookup\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Ipdata.php
+
+		-
+			message: "#^Method Ipdata\\\\ApiClient\\\\Ipdata\\:\\:parseResponse\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Ipdata.php
+
