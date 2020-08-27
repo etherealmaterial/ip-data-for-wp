@@ -130,20 +130,17 @@ EOT;
         for ($i = 0; $i < count($ipdataapikey_array); ++$i) {
             
 			$scripts .= <<<EOT
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 <script>
-	var request = new XMLHttpRequest();
 	var key = '$ipdataapikey_array[$i]';
-	request.open('GET', 'https://api.ipdata.co/?api-key=' + key);
+$( document ).ready(function() {
+	console.log( "ready!" );
+	$.get("https://api.ipdata.co?api-key="  + key, function(response) {
+		console.log(response.country_code);
+	}, "jsonp");
+});
 
-	request.setRequestHeader('Accept', 'application/json');
-
-	request.onreadystatechange = function () {
-	if (this.readyState === 4) {
-		console.log(this.responseText);
-	}
-	};
-
-request.send();
 </script>
 
 
