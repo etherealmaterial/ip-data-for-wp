@@ -135,9 +135,11 @@ EOT;
 <script>
 	var key = '$ipdataapikey_array[$i]';
 $( document ).ready(function() {
-	console.log( "ready!" );
 	$.get("https://api.ipdata.co?api-key="  + key, function(response) {
 		console.log(response.country_code);
+		var countryPath = response.country_code;
+		var url = window.location;
+		console.warn('We are in testing now but if I were live I would execute all of your logic for filter ' + '/' + countryPath.toLowerCase());
 	}, "jsonp");
 });
 
