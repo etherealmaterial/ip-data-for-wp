@@ -24,7 +24,7 @@ add_action( 'admin_init', 'ip_data_for_wp_settings_init' );
 
 
 function ip_data_for_wp_add_admin_menu(  ) { 
-	add_menu_page( 'IP Data for WP - Ethereal Material', 'Geo IP Controller', 'manage_options', 'ip_data_for_wp', 'ip_data_for_wp_options_page', 'dashicons-location');
+	add_menu_page( 'IP Data for WP - Ethereal Material', 'IP Data for WP', 'manage_options', 'ip_data_for_wp', 'ip_data_for_wp_options_page', 'dashicons-location');
 }
 
 function ip_data_for_wp_settings_init(  ) { 
