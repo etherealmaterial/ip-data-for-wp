@@ -37,7 +37,7 @@ function ip_data_for_wp_settings_init(  ) {
 	);
        add_settings_field( 
 		'ip_data_for_wp_ids', 
-		__( 'IDs (comma separated)', 'ip_data_for_wp' ), 
+		__( 'Your API Key:', 'ip_data_for_wp' ), 
 		'ip_data_for_wp_ids_render', 
 		'ip_data_for_wp_pluginPage', 
 		'ip_data_for_wp_pluginPage_section' 
@@ -130,21 +130,21 @@ EOT;
         for ($i = 0; $i < count($ipdataapikey_array); ++$i) {
             
 			$scripts .= <<<EOT
-			<script>
-			var request = new XMLHttpRequest();
-			var key = '$ipdataapikey_array[$i]';
-			request.open('GET', 'https://api.ipdata.co/?api-key=' + key);
-		
-			request.setRequestHeader('Accept', 'application/json');
-		
-			request.onreadystatechange = function () {
-			if (this.readyState === 4) {
-				console.log(this.responseText);
-			}
-			};
-		
-		request.send();
-		</script>
+<script>
+	var request = new XMLHttpRequest();
+	var key = '$ipdataapikey_array[$i]';
+	request.open('GET', 'https://api.ipdata.co/?api-key=' + key);
+
+	request.setRequestHeader('Accept', 'application/json');
+
+	request.onreadystatechange = function () {
+	if (this.readyState === 4) {
+		console.log(this.responseText);
+	}
+	};
+
+request.send();
+</script>
 
 
 EOT;
